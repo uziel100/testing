@@ -1,0 +1,29 @@
+name: API-CI
+# on: [push]
+on:
+  push:
+    - "./api/**"
+    - ".github/workflows/api-cli.yml"
+
+defaults:
+  run:
+    working-directory: ./api
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+          cache: "npm"
+          cache-dependency-path: ./api/package-lock.json
+      - name: Install
+        shell: bash
+        run: npm ci
+      - name: Run unit test
+        shell: bash
+        run: npm run test
